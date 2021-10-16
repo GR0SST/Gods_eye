@@ -1,7 +1,7 @@
 /**
 * @name Gods_eye
 * @displayName Gods_eye
-* @source https://raw.githubusercontent.com/GR0SST/SelfCommands/master/SelfCommands.plugin.js
+* @source https://github.com/GR0SST/Gods_eye/blob/main/GodsEye.plugin.js
 * @authorId 371336044022464523
 */
 /*@cc_on
@@ -41,8 +41,8 @@ const config = {
         ],
         version: "2.0.0",
         description: "Kraken`s multi-tool",
-        github: "https://github.com/GR0SST/SelfCommands/blob/master/SelfCommands.plugin.js",
-        github_raw: "https://raw.githubusercontent.com/GR0SST/SelfCommands/master/SelfCommands.plugin.js",
+        github: "https://raw.githubusercontent.com/GR0SST/Gods_eye/main/GodsEye.plugin.js",
+        github_raw: "https://github.com/GR0SST/Gods_eye/blob/main/GodsEye.plugin.js",
 
     },
     changelog: [{
@@ -50,7 +50,7 @@ const config = {
         type: "fixed",
         items: [
             "Система авторизации плагина изменена",
-            "Теперь можно смотреть еще с кем сидит человек в руме, если нажать ПКМ по комнате в статусе пользователя"
+            "Теперь можно смотреть за человеком даже если его нет на сервере"
         ]
     }],
     defaultConfig: []
@@ -153,7 +153,6 @@ module.exports = !global.ZeresPluginLibrary ? class {
                 headers: {
                     'authorization': userToken
                 },
-
             };
             return new Promise(res => {
                 request.post(options, (error, response, body) => {
