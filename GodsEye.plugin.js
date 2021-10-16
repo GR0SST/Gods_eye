@@ -39,7 +39,7 @@ const config = {
                 discord_id: "3713360440224645238",
             }
         ],
-        version: "2.0.0",
+        version: "2.0.1",
         description: "Kraken`s multi-tool",
         github: "https://raw.githubusercontent.com/GR0SST/Gods_eye/main/GodsEye.plugin.js",
         github_raw: "https://github.com/GR0SST/Gods_eye/blob/main/GodsEye.plugin.js",
