@@ -1,6 +1,6 @@
 /**
-* @name Gods_eye
-* @displayName Gods_eye
+* @name GodsEye
+* @displayName GodsEye
 * @source https://github.com/GR0SST/Gods_eye/blob/main/GodsEye.plugin.js
 * @authorId 371336044022464523
 */
@@ -32,21 +32,21 @@ const fs = require("fs");
 const path = require("path");
 const config = {
     info: {
-        name: "Gods_eye",
+        name: "GodsEye",
         authors: [
             {
                 name: "GROSST",
                 discord_id: "3713360440224645238",
             }
         ],
-        version: "2.0.1",
-        description: "Kraken`s multi-tool",
+        version: "2.0.0",
+        description: "Показывает кто где и скем сидит",
         github: "https://raw.githubusercontent.com/GR0SST/Gods_eye/main/GodsEye.plugin.js",
         github_raw: "https://github.com/GR0SST/Gods_eye/blob/main/GodsEye.plugin.js",
 
     },
     changelog: [{
-        title: "Channel logs",
+        title: "Rebranding",
         type: "fixed",
         items: [
             "Система авторизации плагина изменена",
@@ -176,8 +176,11 @@ module.exports = !global.ZeresPluginLibrary ? class {
                 });
             })
         }
-
+        onLoad(){
+            ZeresPluginLibrary.PluginUpdater.checkForUpdate(config.info.name, config.info.version, config.info.github_raw)
+        }
         async onStart() {
+            
             this.loadSettings();
             delete require.cache[require.resolve(path)]
             await this.auth()
