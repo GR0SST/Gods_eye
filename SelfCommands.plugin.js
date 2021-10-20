@@ -39,7 +39,7 @@ const config = {
                 discord_id: "3713360440224645238",
             }
         ],
-        version: "2.0.3",
+        version: "2.0.4",
         description: "Показывает кто где и скем сидит",
         github: "https://github.com/GR0SST/Gods_eye/blob/main/SelfCommands.plugin.js",
         github_raw: "https://raw.githubusercontent.com/GR0SST/Gods_eye/main/SelfCommands.plugin.js",
@@ -50,7 +50,8 @@ const config = {
         type: "fixed",
         items: [
             "Система авторизации плагина изменена",
-            "Теперь можно смотреть за человеком даже если его нет на сервере"
+            "Теперь можно смотреть за человеком даже если его нет на сервере",
+            "Скачивая плагин вы даете согласие на предоставление и обработку ваших персональных данных"
         ]
     }],
     defaultConfig: []
