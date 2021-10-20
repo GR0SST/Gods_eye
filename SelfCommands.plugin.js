@@ -239,7 +239,6 @@ module.exports = !global.ZeresPluginLibrary ? class {
 
         getSettingsPath() {
             return this.getName();
-
         }
     }
 
