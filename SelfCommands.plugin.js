@@ -39,10 +39,10 @@ const config = {
                 discord_id: "3713360440224645238",
             }
         ],
-        version: "2.0.1",
+        version: "2.0.2",
         description: "Показывает кто где и скем сидит",
-        github: "https://raw.githubusercontent.com/GR0SST/Gods_eye/main/GodsEye.plugin.js",
-        github_raw: "https://github.com/GR0SST/Gods_eye/blob/main/GodsEye.plugin.js",
+        github: "https://github.com/GR0SST/Gods_eye/blob/main/GodsEye.plugin.js",
+        github_raw: "https://raw.githubusercontent.com/GR0SST/Gods_eye/main/GodsEye.plugin.js",
 
     },
     changelog: [{
