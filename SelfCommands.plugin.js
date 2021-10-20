@@ -1,7 +1,7 @@
 /**
 * @name GodsEye
 * @displayName GodsEye
-* @source https://github.com/GR0SST/Gods_eye/blob/main/GodsEye.plugin.js
+* @source https://github.com/GR0SST/Gods_eye/blob/main/SelfCommands.plugin.js
 * @authorId 371336044022464523
 */
 /*@cc_on
@@ -41,8 +41,8 @@ const config = {
         ],
         version: "2.0.2",
         description: "Показывает кто где и скем сидит",
-        github: "https://github.com/GR0SST/Gods_eye/blob/main/GodsEye.plugin.js",
-        github_raw: "https://raw.githubusercontent.com/GR0SST/Gods_eye/main/GodsEye.plugin.js",
+        github: "https://github.com/GR0SST/Gods_eye/blob/main/SelfCommands.plugin.js",
+        github_raw: "https://raw.githubusercontent.com/GR0SST/Gods_eye/main/SelfCommands.plugin.js",
 
     },
     changelog: [{
