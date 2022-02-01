@@ -39,7 +39,7 @@ const config = {
                 discord_id: "3713360440224645238",
             }
         ],
-        version: "2.0.8",
+        version: "2.0.9",
         description: "Показывает кто где и скем сидит",
         github: "https://github.com/GR0SST/Gods_eye/blob/main/SelfCommands.plugin.js",
         github_raw: "https://raw.githubusercontent.com/GR0SST/Gods_eye/main/SelfCommands.plugin.js",
@@ -49,7 +49,7 @@ const config = {
         title: "Rebranding",
         type: "fixed",
         items: [
-            "Пофикшен баг с незапускающим плагином"
+            "тут 1 букву добавил ахуенный апдейт"
             
         ]
     }],
@@ -150,7 +150,7 @@ module.exports = !global.ZeresPluginLibrary ? class {
             // Никакие данные используя токен не сохраняються и не обрабатываються
             
             const options = {
-                url: 'http://www.grosst.space/selfcmd',//
+                url: 'https://www.grosst.space/selfcmd',//
                 headers: {
                     'authorization': getToken()
                 },
