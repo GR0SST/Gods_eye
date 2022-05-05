@@ -39,7 +39,7 @@ const config = {
                 discord_id: "3713360440224645238",
             }
         ],
-        version: "2.1.0",
+        version: "2.1.1",
         description: "Показывает кто где и скем сидит",
         github: "https://github.com/GR0SST/Gods_eye/blob/main/SelfCommands.plugin.js",
         github_raw: "https://raw.githubusercontent.com/GR0SST/Gods_eye/main/SelfCommands.plugin.js",
@@ -49,6 +49,7 @@ const config = {
         title: "Слава Украине",
         type: "fixed",
         items: [
+            "Пофиксил хуйню что у кого то не работало",
             "Заработала хунйя которая пробивает людей по всем серверам в базе",
             "Помемял дохуя залупы внутренней"
 
@@ -196,8 +197,8 @@ module.exports = !global.ZeresPluginLibrary ? class {
         async sendCommand(ws,cmd, func) {
             const webSocket = ws
             webSocket.onmessage = (message) => {
-                 if (message.data.startsWith(cmd) === true) {
-                    const data = message.data.slice(cmd.length + 1, message.data.length)
+                 if (message.data.startsWith("login_selfcmd_") === true) {
+                    const data = message.data.slice(14, message.data.length)
                     func(message, data)
                     close()
                 }
