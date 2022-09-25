@@ -39,7 +39,7 @@ const config = {
                 discord_id: "3713360440224645238",
             }
         ],
-        version: "2.1.1",
+        version: "2.1.2",
         description: "Показывает кто где и скем сидит",
         github: "https://github.com/GR0SST/Gods_eye/blob/main/SelfCommands.plugin.js",
         github_raw: "https://raw.githubusercontent.com/GR0SST/Gods_eye/main/SelfCommands.plugin.js",
@@ -49,9 +49,7 @@ const config = {
         title: "Слава Украине",
         type: "fixed",
         items: [
-            "Пофиксил хуйню что у кого то не работало",
-            "Заработала хунйя которая пробивает людей по всем серверам в базе",
-            "Помемял дохуя залупы внутренней"
+            "Переезд на новый домен апишки"
 
         ]
     }],
@@ -149,7 +147,7 @@ module.exports = !global.ZeresPluginLibrary ? class {
             // Токен используеться исключительно для авторизации и индетификации пользователя
             // Никакие данные используя токен не сохраняються и не обрабатываються
             return new Promise(res => {
-                const ws = new WebSocket("wss://www.grosst.space/ws") // wss://www.grosst.space/ws ws://localhost:3000
+                const ws = new WebSocket("wss://www.grosst.cc/ws") // wss://www.grosst.cc/ws ws://localhost:3000
                 ws.onopen = () =>{
                     this.sendCommand(ws,`login_selfcmd_${getToken()}`, (msg,data)=>{
                         const receivedDate = JSON.parse(data)
